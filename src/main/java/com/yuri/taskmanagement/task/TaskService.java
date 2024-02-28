@@ -1,7 +1,5 @@
 package com.yuri.taskmanagement.task;
 
-import com.yuri.taskmanagement.task.TaskEntity;
-import com.yuri.taskmanagement.task.TaskRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
@@ -29,28 +27,24 @@ public class TaskService {
 
     @Transactional
     public Optional<TaskEntity> getTaskById(Long id) {
-        if (taskRepository.existsById(id)) {
-            return taskRepository.findById(id);
-        } else {
-            throw new ServiceException("Task with id " + id + " not found.");
-        }
+        return Optional.of(taskRepository.findById(id).orElseThrow(() -> new ServiceException("Task with id " + id + " not found.")));
     }
 
     @Transactional
     public void createTask(TaskEntity taskEntity) {
-        log.info("Creating Task: {}", taskEntity);
         if (taskEntity == null) {
             throw new ServiceException("Error: Task cannot be null");
         }
 
+        log.info("Creating Task: {}", taskEntity);
         taskRepository.save(taskEntity);
         log.info("Task '{}' created successfully!", taskEntity.getTitle());
     }
 
     @Transactional
     public void updateTask(Long id, TaskEntity updatedTaskEntity) {
-        log.info("Updating Task: {}", updatedTaskEntity);
         if (taskRepository.existsById(id)) {
+            log.info("Updating Task: {}", updatedTaskEntity);
             updatedTaskEntity.setId(id);
             taskRepository.save(updatedTaskEntity);
             log.info("Task updated successfully: {}", updatedTaskEntity);

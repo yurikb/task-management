@@ -32,17 +32,19 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<String> createTask(@RequestBody TaskEntity taskEntity) {
         taskService.createTask(taskEntity);
-        return ResponseEntity.ok("Task " + taskEntity.getTitle() + " created successfully. Id: " + taskEntity.getId());
+        return ResponseEntity.ok("Task '" + taskEntity.getTitle() + "' created successfully. Id: " + taskEntity.getId());
     }
 
     @PutMapping("/{id}")
-    public void updateTask(@PathVariable Long id, @RequestBody TaskEntity taskEntity) {
+    public ResponseEntity<String> updateTask(@PathVariable Long id, @RequestBody TaskEntity taskEntity) {
         taskService.updateTask(id, taskEntity);
+        return ResponseEntity.ok("Task '" + taskEntity.getTitle() + "' updated successfully. Id: " + taskEntity.getId());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable Long id) {
+    public ResponseEntity<String> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
+        return ResponseEntity.ok("Task with Id '" + id + "' deleted successfully!");
     }
 
 }
